@@ -28,7 +28,7 @@ This project is built incrementally over four weeks. Each team member is respons
 
 - Angular (Standalone Components)
 - TypeScript
-- SCSS
+- CSS
 - Angular HttpClient
 - Jasmine & Karma for unit testing
 

@@ -1,0 +1,42 @@
+<main class="page">
+  <header class="header">
+    <div class="header__top">
+      <h1 class="title">Project Dashboard</h1>
+      <p class="subtitle">One place to navigate the entire app.</p>
+    </div>
+
+    <div class="hint">
+      <strong>Tip:</strong> To add a new page later, just add an item in
+      <code>sections</code> inside <code>dashboard.component.ts</code>.
+    </div>
+  </header>
+
+  <section class="sections">
+    <div class="section" *ngFor="let section of sections; trackBy: trackByName">
+      <h2 class="section__title">{{ section.name }}</h2>
+
+      <div class="grid">
+        <a
+          class="card"
+          *ngFor="let item of section.items; trackBy: trackByRoute"
+          [routerLink]="item.route"
+        >
+          <div class="card__top">
+            <h3 class="card__title">{{ item.title }}</h3>
+
+            <span *ngIf="badgeText(item.status)" [class]="badgeClass(item.status)">
+              {{ badgeText(item.status) }}
+            </span>
+          </div>
+
+          <p class="card__desc">{{ item.description }}</p>
+
+          <div class="card__meta">
+            <span class="meta" *ngIf="item.owner">Owner: {{ item.owner }}</span>
+            <span class="meta">Route: {{ item.route }}</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+</main>
