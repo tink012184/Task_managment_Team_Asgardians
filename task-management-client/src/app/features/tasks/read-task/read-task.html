@@ -1,0 +1,24 @@
+<div class="page">
+  <div class="card">
+    <h1 class="page-title">Read Task by ID</h1>
+
+    <div class="form-group">
+      <label for="taskId">Task ID</label>
+      <input id="taskId" type="text" class="input" [(ngModel)]="taskId" placeholder="Enter task ID" />
+    </div>
+
+    <div class="button-row">
+      <button type="button" class="btn btn-primary" (click)="onSearch()">Search</button>
+    </div>
+
+    <p *ngIf="message">{{ message }}</p>
+
+    <div *ngIf="task">
+      <h2>{{ task.title }}</h2>
+      <p><strong>Description:</strong> {{ task.description || 'N/A' }}</p>
+      <p><strong>Status:</strong> {{ task.status }}</p>
+      <p><strong>Priority:</strong> {{ task.priority }}</p>
+      <p><strong>ID:</strong> {{ task._id }}</p>
+    </div>
+  </div>
+</div>

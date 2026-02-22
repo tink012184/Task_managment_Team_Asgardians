@@ -37,6 +37,13 @@ export class DashboardComponent {
           owner: 'Student A',
         },
         {
+          title: 'Read Task by ID',
+          description: 'Find a task using its ID.',
+          route: '/tasks/read',
+          status: 'ready',
+          owner: 'Student B',
+        },
+        {
           title: 'Task List',
           description: 'View and manage all tasks.',
           route: '/tasks',
