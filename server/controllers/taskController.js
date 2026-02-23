@@ -43,3 +43,11 @@ exports.getTaskById = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+exports.getAllTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find({});
+    return res.status(200).json(tasks);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
