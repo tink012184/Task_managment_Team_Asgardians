@@ -15,4 +15,9 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/tasks/read-task/read-task').then((m) => m.ReadTaskComponent),
   },
+  {
+    path: 'tasks/update',
+    loadComponent: () =>
+      import('./features/tasks/update-task/update-task').then((m) => m.UpdateTaskComponent),
+  },
 ];

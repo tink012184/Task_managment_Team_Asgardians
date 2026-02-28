@@ -1,32 +1,83 @@
 <div class="page">
   <div class="card">
-    <h1 class="page-title">Create Task</h1>
+    <div class="header-row">
+      <h1 class="page-title">Create Task</h1>
 
-    <form class="form">
+      <!-- Return to main page -->
+      <a class="btn btn-secondary" routerLink="/">Return to Main Page</a>
+    </div>
+
+    <!-- Confirmation / error message -->
+    <div
+      *ngIf="message"
+      class="message"
+      [class.success]="messageType === 'success'"
+      [class.error]="messageType === 'error'"
+    >
+      {{ message }}
+    </div>
+    @if (message) {
+      <div
+        class="message"
+        [class.success]="messageType === 'success'"
+        [class.error]="messageType === 'error'"
+      >
+        {{ message }}
+      </div>
+    }
+    <form class="form" (submit)="onSubmit($event)" novalidate>
       <div class="form-group">
-        <label for="title">Task Title</label>
-        <input id="title" type="text" class="input" placeholder="Enter task title" />
+        <label for="title">Task Title <span class="req">*</span></label>
+        <input
+          id="title"
+          name="title"
+          type="text"
+          class="input"
+          placeholder="Enter task title"
+          [(ngModel)]="task.title"
+        />
       </div>
 
       <div class="form-group">
         <label for="description">Description</label>
         <textarea
           id="description"
+          name="description"
           rows="4"
           class="input"
           placeholder="Enter task description"
+          [(ngModel)]="task.description"
         ></textarea>
       </div>
 
       <div class="form-group">
+        <label for="status">Status <span class="req">*</span></label>
+        <select id="status" name="status" class="input" [(ngModel)]="task.status">
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Completed">Completed</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="priority">Priority <span class="req">*</span></label>
+        <select id="priority" name="priority" class="input" [(ngModel)]="task.priority">
+          <option value="Low">Low</option>
+          <option value="Medium">Medium</option>
+          <option value="High">High</option>
+        </select>
+      </div>
+
+      <div class="form-group">
         <label for="dueDate">Due Date</label>
-        <input id="dueDate" type="date" class="input" />
+        <input id="dueDate" name="dueDate" type="date" class="input" [(ngModel)]="task.dueDate" />
       </div>
 
       <div class="button-row">
         <button type="submit" class="btn btn-primary">Save Task</button>
 
-        <button type="button" class="btn btn-secondary">Cancel</button>
+        <!-- Cancel just returns home -->
+        <button type="button" class="btn btn-secondary" (click)="goHome()">Cancel</button>
       </div>
     </form>
   </div>

@@ -1,0 +1,25 @@
+.header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.message {
+  margin: 12px 0 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.message.success {
+  border: 1px solid #2e7d32;
+}
+
+.message.error {
+  border: 1px solid #c62828;
+}
+
+.req {
+  color: #c62828;
+}
