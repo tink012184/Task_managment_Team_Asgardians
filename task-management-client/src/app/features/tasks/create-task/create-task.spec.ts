@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
+import { provideRouter } from '@angular/router';
 
 import { CreateTaskComponent } from './create-task';
 import { TaskService } from '../task';
@@ -19,7 +20,10 @@ describe('CreateTaskComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CreateTaskComponent],
-      providers: [{ provide: TaskService, useClass: FakeTaskService }],
+      providers: [
+        provideRouter([]), // ✅ provides Router for DI + routerLink
+        { provide: TaskService, useClass: FakeTaskService },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateTaskComponent);
@@ -36,7 +40,7 @@ describe('CreateTaskComponent', () => {
       description: 'desc',
       status: 'Pending',
       priority: 'Low',
-    };
+    } as any;
 
     component.onSubmit();
 
@@ -49,11 +53,11 @@ describe('CreateTaskComponent', () => {
       description: 'Test Description',
       status: 'Pending',
       priority: 'Low',
-    };
+    } as any;
 
     component.onSubmit();
 
-    expect(component.message).toBe('Task created successfully!');
+    expect(component.message).toBe('✅ Task created successfully!');
     expect(component.task.title).toBe('');
     expect(component.task.description).toBe('');
     expect(component.task.status).toBe('Pending');
@@ -61,7 +65,6 @@ describe('CreateTaskComponent', () => {
   });
 
   it('should show error message if service throws an error', () => {
-    // Override the fake service method for this test
     taskService.createTask = () => throwError(() => ({ error: { message: 'Server error' } }));
 
     component.task = {
@@ -69,7 +72,7 @@ describe('CreateTaskComponent', () => {
       description: 'Test Description',
       status: 'Pending',
       priority: 'Low',
-    };
+    } as any;
 
     component.onSubmit();
 
