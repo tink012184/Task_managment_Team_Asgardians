@@ -1,4 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+<<<<<<< HEAD
+import { CreateTaskComponent } from './create-task';
+
+describe('CreateTaskComponent', () => {
+  let component: CreateTaskComponent;
+  let fixture: ComponentFixture<CreateTaskComponent>;
+=======
 import { of, throwError } from 'rxjs';
 import { provideRouter } from '@angular/router';
 
@@ -16,14 +23,18 @@ describe('CreateTaskComponent', () => {
   let component: CreateTaskComponent;
   let fixture: ComponentFixture<CreateTaskComponent>;
   let taskService: FakeTaskService;
+>>>>>>> origin/main
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CreateTaskComponent],
+<<<<<<< HEAD
+=======
       providers: [
         provideRouter([]), // ✅ provides Router for DI + routerLink
         { provide: TaskService, useClass: FakeTaskService },
       ],
+>>>>>>> origin/main
     }).compileComponents();
 
     fixture = TestBed.createComponent(CreateTaskComponent);
