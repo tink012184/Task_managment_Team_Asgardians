@@ -41,25 +41,26 @@ describe("getTaskById controller", () => {
 
   // Test 2: Verifies a valid ID with no matching record found returns a 404 response.
   it("returns 404 when no task exists for a valid id", async () => {
-    const req = { params: { id: "TK01" } };
-    const res = createRes();
+    const testId = "65f1c2a9e6b2c3d4e5f67890";
 
-    Task.db.base.Types.ObjectId.isValid.mockReturnValue(true);
+    const req = { params: { id: testId } };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
+
     Task.findById.mockResolvedValue(null);
 
     await getTaskById(req, res);
 
-    expect(Task.findById).toHaveBeenCalledWith("TK01");
+    expect(Task.findById).toHaveBeenCalledWith(testId);
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({ message: "Task not found." });
   });
 
-  // Test 3: Verifies a successful lookup returns HTTP 200 and returns the task found in the database which sends JSON response with the task data. 
+  // Test 3: Verifies a successful lookup returns HTTP 200 and returns the task found in the database which sends JSON response with the task data.
   it("returns 200 and the task when found", async () => {
-    const req = { params: { id: "TK02" } };
+    const req = { params: { id: "69a3527404dac72c9e839d38" } };
     const res = createRes();
     const task = {
-      _id: "TK02",
+      _id: "69a3527404dac72c9e839d38",
       title: "Build read API",
       status: "Pending",
       priority: "High",

@@ -4,6 +4,14 @@ jest.mock("../models/task", () => ({
   findByIdAndUpdate: jest.fn(),
 }));
 
+beforeEach(() => {
+  req = { params: {}, body: {} };
+  res = {
+    status: jest.fn().mockReturnThis(),
+    json: jest.fn().mockReturnThis(),
+  };
+});
+
 const Task = require("../models/task");
 const { updateTask } = require("../controllers/taskController");
 
