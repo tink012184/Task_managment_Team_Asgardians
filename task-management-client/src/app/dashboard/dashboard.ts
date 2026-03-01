@@ -44,13 +44,6 @@ export class DashboardComponent {
           owner: 'Student B',
         },
         {
-          title: 'Delete Task by ID',
-          description: 'Delete a task using its ID.',
-          route: '/tasks/delete',
-          status: 'ready',
-          owner: 'Student B',
-        },
-        {
           title: 'Task List',
           description: 'View and manage all tasks.',
           route: '/tasks/list',

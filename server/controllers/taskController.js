@@ -84,25 +84,3 @@ exports.updateTask = async (req, res) => {
     return res.status(400).json({ message: err.message });
   }
 };
-
-// ✅ DELETE (Week 2)
-// DELETE /api/tasks/:id
-exports.deleteTask = async (req, res) => {
-  try {
-    const { id } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-      return res.status(400).json({ message: "Invalid task id." });
-    }
-
-    const deletedTask = await Task.findByIdAndDelete(id);
-
-    if (!deletedTask) {
-      return res.status(404).json({ message: "Task not found." });
-    }
-
-    return res.status(200).json({ message: "Task deleted successfully." });
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
-};
