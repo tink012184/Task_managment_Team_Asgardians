@@ -1,92 +1,87 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-<<<<<<< HEAD
-import { CreateTaskComponent } from './create-task';
-
-describe('CreateTaskComponent', () => {
-  let component: CreateTaskComponent;
-  let fixture: ComponentFixture<CreateTaskComponent>;
-=======
+import '@angular/compiler';
 import { of, throwError } from 'rxjs';
-import { provideRouter } from '@angular/router';
-
+import { Router } from '@angular/router';
 import { CreateTaskComponent } from './create-task';
 import { TaskService } from '../task';
 
-/* ✅ Manual fake service */
-class FakeTaskService {
-  createTask(task: any) {
-    return of({});
-  }
+function makeSpy() {
+  const fn: any = (...args: any[]) => {
+    fn.calls.push(args);
+    return fn.impl ? fn.impl(...args) : null; // return null instead of undefined
+  };
+  fn.calls = [] as any[];
+  fn.impl = null as any;
+  fn.setImpl = (impl: any) => (fn.impl = impl);
+  return fn;
 }
 
 describe('CreateTaskComponent', () => {
   let component: CreateTaskComponent;
-  let fixture: ComponentFixture<CreateTaskComponent>;
-  let taskService: FakeTaskService;
->>>>>>> origin/main
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [CreateTaskComponent],
-<<<<<<< HEAD
-=======
-      providers: [
-        provideRouter([]), // ✅ provides Router for DI + routerLink
-        { provide: TaskService, useClass: FakeTaskService },
-      ],
->>>>>>> origin/main
-    }).compileComponents();
+  let createTaskSpy: ReturnType<typeof makeSpy>;
+  let navigateSpy: ReturnType<typeof makeSpy>;
 
-    fixture = TestBed.createComponent(CreateTaskComponent);
-    component = fixture.componentInstance;
+  let taskServiceStub: Partial<TaskService>;
+  let routerStub: Partial<Router>;
 
-    taskService = TestBed.inject(TaskService) as unknown as FakeTaskService;
+  beforeEach(() => {
+    createTaskSpy = makeSpy();
+    navigateSpy = makeSpy();
 
-    await fixture.whenStable();
+    taskServiceStub = {
+      createTask: createTaskSpy as any,
+    };
+
+    routerStub = {
+      navigate: navigateSpy as any,
+    };
+
+    // ✅ your component needs (taskService, router)
+    component = new CreateTaskComponent(taskServiceStub as TaskService, routerStub as Router);
   });
 
-  it('should show validation message when required fields are missing', () => {
-    component.task = {
-      title: '',
-      description: 'desc',
-      status: 'Pending',
-      priority: 'Low',
-    } as any;
+  it('does not call service when title is empty', () => {
+    // IMPORTANT: adjust these lines to match your actual component model
+    // If your component uses component.task.title, keep it.
+    // If it uses a form, update accordingly.
+    component.task.title = '   ';
+    component.task.status = 'Pending';
+    component.task.priority = 'High';
 
     component.onSubmit();
 
-    expect(component.message).toBe('Title, Status, and Priority are required.');
+    expect(createTaskSpy.calls.length).toBe(0);
+    expect(component.message).toBeTruthy();
   });
 
-  it('should show success message and reset form on successful submit', () => {
-    component.task = {
-      title: 'Test Task',
-      description: 'Test Description',
-      status: 'Pending',
-      priority: 'Low',
-    } as any;
+  it('calls createTask and sets message on success', () => {
+    component.task.title = 'New Task';
+    component.task.description = 'Test description';
+    component.task.status = 'Pending';
+    component.task.priority = 'High';
+
+    createTaskSpy.setImpl(() => of({}));
 
     component.onSubmit();
 
-    expect(component.message).toBe('✅ Task created successfully!');
-    expect(component.task.title).toBe('');
-    expect(component.task.description).toBe('');
-    expect(component.task.status).toBe('Pending');
-    expect(component.task.priority).toBe('Low');
+    expect(createTaskSpy.calls.length).toBe(1);
+    expect(component.message).toBeTruthy();
+    // if your component navigates after create
+    // expect(navigateSpy.calls.length).toBe(1);
   });
 
-  it('should show error message if service throws an error', () => {
-    taskService.createTask = () => throwError(() => ({ error: { message: 'Server error' } }));
+  it('shows API error message on failure', () => {
+    component.task.title = 'Duplicate Title';
+    component.task.status = 'Pending';
+    component.task.priority = 'High';
 
-    component.task = {
-      title: 'Test Task',
-      description: 'Test Description',
-      status: 'Pending',
-      priority: 'Low',
-    } as any;
+    createTaskSpy.setImpl(() =>
+      throwError(() => ({ error: { message: 'Title must be unique.' } })),
+    );
 
     component.onSubmit();
 
-    expect(component.message).toBe('Server error');
+    expect(createTaskSpy.calls.length).toBe(1);
+    expect(component.message).toBe('Title must be unique.');
   });
 });

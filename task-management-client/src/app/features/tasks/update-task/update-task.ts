@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { TaskService } from '../task';
 
 type MessageType = 'success' | 'error' | '';
@@ -9,7 +9,7 @@ type MessageType = 'success' | 'error' | '';
 @Component({
   selector: 'app-update-task',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule],
   templateUrl: './update-task.html',
   styleUrl: './update-task.css',
 })
