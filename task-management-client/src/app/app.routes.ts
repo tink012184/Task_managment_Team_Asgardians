@@ -16,7 +16,7 @@ export const routes: Routes = [
       import('./features/tasks/read-task/read-task').then((m) => m.ReadTaskComponent),
   },
   {
-    path: 'tasks',
+    path: 'tasks/list',
     loadComponent: () =>
       import('./features/tasks/list-tasks/list-tasks').then((m) => m.ListTasksComponent),
   },

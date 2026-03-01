@@ -1,36 +1,37 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-import type { Task } from './models/task';
-export type { Task } from './models/task';
+import { Task } from './models/task';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
-  private readonly baseUrl = 'http://localhost:3000/api/tasks';
+  private apiUrl = 'http://localhost:3000/api/tasks';
 
   constructor(private http: HttpClient) {}
 
-  createTask(task: Partial<Task>): Observable<Task> {
-    return this.http.post<Task>(this.baseUrl, task);
+ 
+  createTask(task: Partial<Task>): Observable<any> {
+    return this.http.post(this.apiUrl, task);
   }
 
-  getTaskById(id: string): Observable<Task> {
-    return this.http.get<Task>(`${this.baseUrl}/${id}`);
+  // ✅ Needed for UpdateTaskComponent (load)
+  getTaskById(id: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/${id}`);
   }
 
-  updateTask(id: string, payload: Partial<Task>): Observable<Task> {
-    return this.http.put<Task>(`${this.baseUrl}/${id}`, payload);
+  // ✅ Needed for UpdateTaskComponent (save)
+  updateTask(id: string, payload: Partial<Task>): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, payload);
   }
 
-  deleteTask(id: string): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.baseUrl}/${id}`);
+  getTasks(): Observable<any> {
+    return this.http.get(this.apiUrl);
   }
 
   getAllTasks(): Observable<Task[]> {
-    return this.http.get<Task[]>(this.baseUrl);
+    return this.http.get<Task[]>(this.apiUrl);
   }
 
   searchTasks(q: string): Observable<Task[]> {

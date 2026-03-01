@@ -48,6 +48,16 @@ exports.getTaskById = async (req, res) => {
   }
 };
 
+// Get All Tasks Week 1
+exports.getAllTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find({});
+    res.status(200).json(tasks);
+  } catch (err) {
+    res.status(500).json({ message: "Error retrieving tasks." });
+  }
+};
+
 // ✅ UPDATE (Week 2)
 // PUT /api/tasks/:id
 exports.updateTask = async (req, res) => {

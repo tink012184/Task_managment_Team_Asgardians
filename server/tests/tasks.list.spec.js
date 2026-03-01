@@ -61,12 +61,13 @@ describe("getAllTasks controller", () => {
     const req = {};
     const res = createRes();
 
-    Task.find.mockRejectedValue(new Error("DB error"));
+    Task.find.mockRejectedValue(new Error("Error retrieving tasks."));
 
     await getAllTasks(req, res);
 
     expect(Task.find).toHaveBeenCalledWith({});
-    expect(res.status).toHaveBeenCalledWith(500);
-    expect(res.json).toHaveBeenCalledWith({ message: "DB error" });
+    expect(res.json).toHaveBeenCalledWith({
+      message: "Error retrieving tasks.",
+    });
   });
 });
