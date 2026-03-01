@@ -46,4 +46,12 @@ export class TaskService {
   deleteTask(id: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
+
+  getAllTasks(): Observable<Task[]> {
+  return this.http.get<Task[]>(this.apiUrl);
+  }
+
+  deleteTask(id: string): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
+  }
 }
