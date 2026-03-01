@@ -57,6 +57,13 @@ export class DashboardComponent {
           status: 'ready',
           owner: 'Student C',
         },
+        {
+          title: 'Search Tasks',
+          description: 'Search tasks by title/description.',
+          route: '/tasks/search',
+          status: 'ready',
+          owner: 'Student C',
+        },
       ],
     },
     {

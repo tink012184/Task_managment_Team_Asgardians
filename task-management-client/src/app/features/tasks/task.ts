@@ -11,7 +11,7 @@ export class TaskService {
 
   constructor(private http: HttpClient) {}
 
-  // Existing create (keep if you already have it)
+ 
   createTask(task: Partial<Task>): Observable<any> {
     return this.http.post(this.apiUrl, task);
   }
@@ -34,7 +34,8 @@ export class TaskService {
     return this.http.get<Task[]>(this.apiUrl);
   }
 
-  deleteTask(id: string): Observable<{ message: string }> {
-    return this.http.delete<{ message: string }>(`${this.apiUrl}/${id}`);
+  searchTasks(q: string): Observable<Task[]> {
+    const query = (q || '').trim();
+    return this.http.get<Task[]>(`${this.baseUrl}/search?q=${encodeURIComponent(query)}`);
   }
 }

@@ -30,4 +30,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/tasks/update-task/update-task').then((m) => m.UpdateTaskComponent),
   },
+    {
+  path: 'tasks/list',
+  loadComponent: () =>
+    import('./features/tasks/list-tasks/list-tasks').then((m) => m.ListTasksComponent),
+},
+{
+  path: 'tasks/search',
+  loadComponent: () =>
+    import('./features/tasks/search-tasks/search-tasks').then((m) => m.SearchTasksComponent),
+},
 ];

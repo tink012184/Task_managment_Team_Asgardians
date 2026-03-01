@@ -116,3 +116,35 @@ exports.deleteTask = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
+// ✅ SEARCH (Week 2)
+// GET /api/tasks/search?q=keyword
+exports.searchTasks = async (req, res) => {
+  try {
+    const q = (req.query.q || "").trim();
+
+    // If no query provided, return empty array (keeps it simple)
+    if (!q) {
+      return res.status(200).json([]);
+    }
+
+    const regex = new RegExp(q, "i");
+
+    const results = await Task.find({
+      $or: [{ title: regex }, { description: regex }],
+    });
+
+    return res.status(200).json(results);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+// ✅ LIST ALL TASKS (Week 1)
+// GET /api/tasks
+exports.getAllTasks = async (req, res) => {
+  try {
+    const tasks = await Task.find();
+    return res.status(200).json(tasks);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
