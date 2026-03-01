@@ -40,7 +40,7 @@ describe("deleteTask controller", () => {
   });
 
   it("returns 404 when no task exists for a valid id", async () => {
-    const req = { params: { id: "TK01" } };
+    const req = { params: { id: "507f1f77bcf86cd799439011" } };
     const res = createRes();
 
     Task.db.base.Types.ObjectId.isValid.mockReturnValue(true);
@@ -48,21 +48,21 @@ describe("deleteTask controller", () => {
 
     await deleteTask(req, res);
 
-    expect(Task.findByIdAndDelete).toHaveBeenCalledWith("TK01");
+    expect(Task.findByIdAndDelete).toHaveBeenCalledWith("507f1f77bcf86cd799439011");
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({ message: "Task not found." });
   });
 
   it("returns 200 when a task is deleted successfully", async () => {
-    const req = { params: { id: "TK02" } };
+    const req = { params: { id: "507f1f77bcf86cd799439012" } };
     const res = createRes();
 
     Task.db.base.Types.ObjectId.isValid.mockReturnValue(true);
-    Task.findByIdAndDelete.mockResolvedValue({ _id: "TK02" });
+    Task.findByIdAndDelete.mockResolvedValue({ _id: "507f1f77bcf86cd799439012" });
 
     await deleteTask(req, res);
 
-    expect(Task.findByIdAndDelete).toHaveBeenCalledWith("TK02");
+    expect(Task.findByIdAndDelete).toHaveBeenCalledWith("507f1f77bcf86cd799439012");
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       message: "Task deleted successfully.",
