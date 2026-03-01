@@ -3,12 +3,11 @@ const router = express.Router();
 
 const {
   createTask,
-  getAllTasks, // ✅ add this
+  getAllTasks,
   getTaskById,
   updateTask,
   deleteTask,
   searchTasks,
-  getAllTasks,
 } = require("../controllers/taskController");
 
 // CREATE
@@ -25,5 +24,8 @@ router.put("/:id", updateTask);
 
 // DELETE
 router.delete("/:id", deleteTask);
+
+//SEARCH
+router.get("/:id", searchTasks);
 
 module.exports = router;

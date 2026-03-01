@@ -138,13 +138,3 @@ exports.searchTasks = async (req, res) => {
     return res.status(500).json({ message: err.message });
   }
 };
-// ✅ LIST ALL TASKS (Week 1)
-// GET /api/tasks
-exports.getAllTasks = async (req, res) => {
-  try {
-    const tasks = await Task.find();
-    return res.status(200).json(tasks);
-  } catch (err) {
-    return res.status(500).json({ message: err.message });
-  }
-};

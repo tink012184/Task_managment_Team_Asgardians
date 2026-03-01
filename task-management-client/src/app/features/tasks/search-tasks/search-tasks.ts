@@ -2,7 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { Task, TaskService } from '../task';
+import { TaskService } from '../task';
+import { Task } from '../models/task';
 
 @Component({
   selector: 'app-search-tasks',
@@ -22,17 +23,17 @@ export class SearchTasksComponent {
     this.errorMessage = '';
 
     this.taskService.searchTasks(this.query).subscribe({
-  next: (tasks: Task[]) => {
-    setTimeout(() => {
-      this.results = tasks;
-    }, 0);
-  },
-  error: (_err: any) => {
-    setTimeout(() => {
-      this.errorMessage = 'Failed to search tasks.';
-      this.results = [];
-    }, 0);
-  },
-});
+      next: (tasks: Task[]) => {
+        setTimeout(() => {
+          this.results = tasks;
+        }, 0);
+      },
+      error: (_err: any) => {
+        setTimeout(() => {
+          this.errorMessage = 'Failed to search tasks.';
+          this.results = [];
+        }, 0);
+      },
+    });
   }
 }
