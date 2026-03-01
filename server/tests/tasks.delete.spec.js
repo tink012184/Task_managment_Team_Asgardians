@@ -1,14 +1,7 @@
+const mongoose = require("mongoose");
+
 jest.mock("../models/task", () => ({
   findByIdAndDelete: jest.fn(),
-  db: {
-    base: {
-      Types: {
-        ObjectId: {
-          isValid: jest.fn(),
-        },
-      },
-    },
-  },
 }));
 
 const Task = require("../models/task");
@@ -24,13 +17,14 @@ const createRes = () => {
 describe("deleteTask controller", () => {
   afterEach(() => {
     jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   it("returns 400 when task id is invalid", async () => {
     const req = { params: { id: "invalid-id" } };
     const res = createRes();
 
-    Task.db.base.Types.ObjectId.isValid.mockReturnValue(false);
+    jest.spyOn(mongoose.Types.ObjectId, "isValid").mockReturnValue(false);
 
     await deleteTask(req, res);
 
@@ -43,7 +37,7 @@ describe("deleteTask controller", () => {
     const req = { params: { id: "507f1f77bcf86cd799439011" } };
     const res = createRes();
 
-    Task.db.base.Types.ObjectId.isValid.mockReturnValue(true);
+    jest.spyOn(mongoose.Types.ObjectId, "isValid").mockReturnValue(true);
     Task.findByIdAndDelete.mockResolvedValue(null);
 
     await deleteTask(req, res);
@@ -57,7 +51,7 @@ describe("deleteTask controller", () => {
     const req = { params: { id: "507f1f77bcf86cd799439012" } };
     const res = createRes();
 
-    Task.db.base.Types.ObjectId.isValid.mockReturnValue(true);
+    jest.spyOn(mongoose.Types.ObjectId, "isValid").mockReturnValue(true);
     Task.findByIdAndDelete.mockResolvedValue({ _id: "507f1f77bcf86cd799439012" });
 
     await deleteTask(req, res);

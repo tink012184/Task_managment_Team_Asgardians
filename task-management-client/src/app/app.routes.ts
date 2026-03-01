@@ -21,8 +21,8 @@ export const routes: Routes = [
       import('./features/tasks/delete-task/delete-task').then((m) => m.DeleteTaskComponent),
   },
   {
-    path: 'tasks',
+    path: 'tasks/update',
     loadComponent: () =>
-      import('./features/tasks/list-tasks/list-tasks').then((m) => m.ListTasksComponent),
+      import('./features/tasks/update-task/update-task').then((m) => m.UpdateTaskComponent),
   },
 ];

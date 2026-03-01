@@ -53,9 +53,9 @@ export class DashboardComponent {
         {
           title: 'Task List',
           description: 'View and manage all tasks.',
-          route: '/tasks',
-          status: 'planned',
-          owner: 'Team',
+          route: '/tasks/list',
+          status: 'ready',
+          owner: 'Student C',
         },
       ],
     },
