@@ -7,7 +7,7 @@ type DashboardItem = {
   description: string;
   route: string;
   status?: 'ready' | 'in-progress' | 'planned';
-  owner?: string; // e.g., "Student A"
+  owner?: string;
 };
 
 type DashboardSection = {
@@ -23,8 +23,6 @@ type DashboardSection = {
   styleUrls: ['./dashboard.css'],
 })
 export class DashboardComponent {
-  // ✅ DROP-IN AREA:
-  // Add new pages by adding items below (title/description/route).
   sections: DashboardSection[] = [
     {
       name: 'Tasks (Core)',
@@ -63,6 +61,18 @@ export class DashboardComponent {
           route: '/tasks/search',
           status: 'ready',
           owner: 'Student C',
+        },
+      ],
+    },
+    {
+      name: 'Projects',
+      items: [
+        {
+          title: 'Create Project',
+          description: 'Add a new project (form view).',
+          route: '/projects/create',
+          status: 'ready',
+          owner: 'Student A',
         },
       ],
     },

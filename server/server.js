@@ -7,6 +7,9 @@ const tasksRouter = require("./routes/tasks");
 
 const app = express();
 
+const projectRoutes = require("./routes/projectRoutes");
+
+app.use("/api/projects", projectRoutes);
 app.use(cors());
 app.use(express.json());
 
