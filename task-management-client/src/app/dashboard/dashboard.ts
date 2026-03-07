@@ -74,6 +74,13 @@ export class DashboardComponent {
           status: 'ready',
           owner: 'Student A',
         },
+        {
+          title: 'Read Project by ID',
+          description: 'Find a project using its ID.',
+          route: '/projects/read',
+          status: 'ready',
+          owner: 'Student B',
+        },
       ],
     },
     {
