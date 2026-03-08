@@ -81,6 +81,13 @@ export class DashboardComponent {
           status: 'ready',
           owner: 'Student B',
         },
+        {
+          title: 'Project List',
+          description: 'View all projects.',
+          route: '/projects/list',
+          status: 'ready',
+          owner: 'Student C',
+        },
       ],
     },
     {

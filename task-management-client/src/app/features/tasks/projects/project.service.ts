@@ -7,7 +7,7 @@ import { Project } from './projects.model';
   providedIn: 'root',
 })
 export class ProjectService {
-  private apiUrl = '/api/projects';
+  private apiUrl = 'http://localhost:3000/api/projects';
 
   constructor(private http: HttpClient) {}
 
@@ -17,5 +17,9 @@ export class ProjectService {
 
   getProjectById(id: string): Observable<Project> {
     return this.http.get<Project>(`${this.apiUrl}/${id}`);
+  }
+
+  getAllProjects(): Observable<Project[]> {
+    return this.http.get<Project[]>(this.apiUrl);
   }
 }

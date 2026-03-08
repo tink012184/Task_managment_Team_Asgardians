@@ -51,7 +51,20 @@ const getProjectById = async (req, res) => {
   }
 };
 
+const getAllProjects = async (req, res) => {
+  try {
+    const projects = await Project.find();
+    return res.status(200).json(projects);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server error while listing projects.",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createProject,
   getProjectById,
+  getAllProjects,
 };

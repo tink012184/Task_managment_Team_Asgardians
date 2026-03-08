@@ -49,4 +49,11 @@ export const routes: Routes = [
         (m) => m.ProjectReadComponent,
       ),
   },
+  {
+    path: 'projects/list',
+    loadComponent: () =>
+      import('./features/tasks/projects/project-list/project-list.component').then(
+        (m) => m.ProjectListComponent,
+      ),
+  },
 ];
