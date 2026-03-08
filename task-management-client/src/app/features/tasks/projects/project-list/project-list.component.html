@@ -1,0 +1,13 @@
+<h2>Projects</h2>
+
+<p *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<ng-container *ngIf="!errorMessage">
+  <ng-container *ngIf="projects$ | async as projects">
+    <p *ngIf="projects.length === 0">No projects found.</p>
+
+    <ul *ngIf="projects.length > 0">
+      <li *ngFor="let p of projects">{{ p.name }}</li>
+    </ul>
+  </ng-container>
+</ng-container>

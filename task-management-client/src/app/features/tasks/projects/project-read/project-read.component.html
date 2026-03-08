@@ -1,0 +1,29 @@
+<div class="page">
+  <div class="card">
+    <h1 class="page-title">Read Project by ID</h1>
+
+    <div class="form-group">
+      <label for="projectId">Project ID</label>
+      <input
+        id="projectId"
+        type="text"
+        class="input"
+        [(ngModel)]="projectId"
+        placeholder="Enter project ID"
+      />
+    </div>
+
+    <div class="button-row">
+      <button type="button" class="btn btn-primary" (click)="onSearch()">Search</button>
+    </div>
+
+    <p *ngIf="message">{{ message }}</p>
+
+    <div *ngIf="project">
+      <h2>{{ project.name }}</h2>
+      <p><strong>Description:</strong> {{ project.description }}</p>
+      <p><strong>Start Date:</strong> {{ project.startDate }}</p>
+      <p><strong>ID:</strong> {{ project._id }}</p>
+    </div>
+  </div>
+</div>
