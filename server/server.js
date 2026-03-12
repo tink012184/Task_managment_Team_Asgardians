@@ -9,24 +9,25 @@ const projectRoutes = require("./routes/projectRoutes");
 
 const app = express();
 
-// Allow Angular dev server to call the API
-const cors = require("cors");
-
 app.use(
   cors({
     origin: [
       "http://localhost:4200",
       "https://task-managment-team-asgardians.onrender.com",
     ],
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   }),
 );
+
 app.use(express.json());
 
-// API routes
 app.use("/api/tasks", tasksRouter);
 app.use("/api/projects", projectRoutes);
+
+app.get("/", (_req, res) => {
+  res.send("Task Management API is running.");
+});
 
 const startServer = async () => {
   try {
@@ -34,9 +35,9 @@ const startServer = async () => {
     console.log("✅ MongoDB connected");
 
     const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () =>
-      console.log(`✅ API running on http://localhost:${PORT}`),
-    );
+    app.listen(PORT, () => {
+      console.log(`✅ API running on port ${PORT}`);
+    });
   } catch (err) {
     console.error("❌ MongoDB connection error:", err);
     process.exit(1);
