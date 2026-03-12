@@ -22,7 +22,9 @@ describe('ListTasksComponent', () => {
 
   it('should create', () => {
     fixture.detectChanges();
-    const req = httpMock.expectOne('http://localhost:3000/api/tasks');
+    const req = httpMock.expectOne(
+      'https://task-managment-team-asgardians-server.onrender.com/api/tasks',
+    );
     req.flush([]);
     fixture.detectChanges();
     expect(fixture.componentInstance).toBeTruthy();
@@ -31,7 +33,9 @@ describe('ListTasksComponent', () => {
   it('should render task titles when API returns tasks', () => {
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('http://localhost:3000/api/tasks');
+    const req = httpMock.expectOne(
+      'https://task-managment-team-asgardians-server.onrender.com/api/tasks',
+    );
     req.flush([
       { _id: '1', title: 'Task A', status: 'Pending', priority: 'Low' },
       { _id: '2', title: 'Task B', status: 'In Progress', priority: 'High' },
@@ -47,7 +51,9 @@ describe('ListTasksComponent', () => {
   it('should show "No tasks found." when API returns empty array', () => {
     fixture.detectChanges();
 
-    const req = httpMock.expectOne('http://localhost:3000/api/tasks');
+    const req = httpMock.expectOne(
+      'https://task-managment-team-asgardians-server.onrender.com/api/tasks',
+    );
     req.flush([]);
 
     fixture.detectChanges();

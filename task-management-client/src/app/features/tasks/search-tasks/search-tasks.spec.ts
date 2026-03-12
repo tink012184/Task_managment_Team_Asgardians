@@ -34,7 +34,7 @@ describe('SearchTasksComponent', () => {
     component.search();
 
     const req = httpMock.expectOne(
-      'http://localhost:3000/api/tasks/search?q=test'
+      'https://task-managment-team-asgardians-server.onrender.com/api/tasks/search?q=test',
     );
     req.flush([{ _id: '1', title: 'Task A' }]);
     vi.runAllTimers();
@@ -54,7 +54,7 @@ describe('SearchTasksComponent', () => {
     component.search();
 
     const req = httpMock.expectOne(
-      'http://localhost:3000/api/tasks/search?q=xyz'
+      'https://task-managment-team-asgardians-server.onrender.com/api/tasks/search?q=xyz',
     );
     req.flush([]);
     vi.runAllTimers();
