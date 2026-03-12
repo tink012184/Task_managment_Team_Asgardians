@@ -1,25 +1,29 @@
-<div class="project-form">
-  <h2>Create Project</h2>
+<div class="page">
+  <div class="project-form">
+    <h2>Create Project</h2>
 
-  <form (ngSubmit)="submitProject()">
-    <div>
-      <label for="name">Project Name</label>
-      <input id="name" name="name" type="text" [(ngModel)]="project.name" />
-    </div>
+    <form (ngSubmit)="submitProject()">
+      <div>
+        <label for="name">Project Name</label>
+        <input id="name" name="name" type="text" [(ngModel)]="project.name" />
+      </div>
 
-    <div>
-      <label for="description">Description</label>
-      <textarea id="description" name="description" [(ngModel)]="project.description"></textarea>
-    </div>
+      <div>
+        <label for="description">Description</label>
+        <textarea id="description" name="description" [(ngModel)]="project.description"></textarea>
+      </div>
 
-    <div>
-      <label for="startDate">Start Date</label>
-      <input id="startDate" name="startDate" type="date" [(ngModel)]="project.startDate" />
-    </div>
+      <div>
+        <label for="startDate">Start Date</label>
+        <input id="startDate" name="startDate" type="date" [(ngModel)]="project.startDate" />
+      </div>
 
-    <button type="submit">Create Project</button>
-  </form>
+      <button type="submit">Create Project</button>
+    </form>
 
-  <p *ngIf="message">{{ message }}</p>
-  <p *ngIf="error">{{ error }}</p>
+    <button type="button" class="btn btn-secondary" (click)="goHome()">Cancel</button>
+
+    <p *ngIf="message">{{ message }}</p>
+    <p *ngIf="error">{{ error }}</p>
+  </div>
 </div>

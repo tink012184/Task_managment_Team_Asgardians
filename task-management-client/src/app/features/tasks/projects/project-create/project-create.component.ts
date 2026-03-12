@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProjectService } from '../project.service';
 import { Project } from '../projects.model';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-project-create',
@@ -20,7 +21,14 @@ export class ProjectCreateComponent {
   message = '';
   error = '';
 
-  constructor(private projectService: ProjectService) {}
+  constructor(
+    private projectService: ProjectService,
+    private router: Router,
+  ) {}
+
+  goHome() {
+    this.router.navigateByUrl('/');
+  }
 
   submitProject(): void {
     this.message = '';

@@ -1,0 +1,25 @@
+<div class="page">
+  <h2>Update Project</h2>
+
+  <label for="projectId">Project ID</label>
+  <input id="projectId" type="text" [(ngModel)]="projectId" name="projectId" />
+
+  <button type="button" (click)="loadProject()">Load Project</button>
+
+  <p *ngIf="error">{{ error }}</p>
+  <p *ngIf="message">{{ message }}</p>
+
+  <form *ngIf="projectLoaded" (ngSubmit)="updateProject()">
+    <label for="name">Name</label>
+    <input id="name" type="text" [(ngModel)]="project.name" name="name" />
+
+    <label for="description">Description</label>
+    <textarea id="description" [(ngModel)]="project.description" name="description"></textarea>
+
+    <label for="startDate">Start Date</label>
+    <input id="startDate" type="date" [(ngModel)]="project.startDate" name="startDate" />
+
+    <button type="submit">Update Project</button>
+  </form>
+  <button type="button" class="btn btn-secondary" (click)="goHome()">Cancel</button>
+</div>

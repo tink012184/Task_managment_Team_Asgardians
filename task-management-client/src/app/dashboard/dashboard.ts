@@ -32,7 +32,7 @@ export class DashboardComponent {
           description: 'Add a new task (form view).',
           route: '/tasks/create',
           status: 'ready',
-          owner: 'Student A',
+          owner: 'Melissa Lutz',
         },
         {
           title: 'Read Task by ID',
@@ -62,6 +62,13 @@ export class DashboardComponent {
           status: 'ready',
           owner: 'Student C',
         },
+        {
+          title: 'Update Task',
+          description: 'Update an existing task by ID.',
+          route: '/tasks/update',
+          status: 'ready',
+          owner: 'Melissa Lutz',
+        },
       ],
     },
     {
@@ -72,7 +79,7 @@ export class DashboardComponent {
           description: 'Add a new project (form view).',
           route: '/projects/create',
           status: 'ready',
-          owner: 'Student A',
+          owner: 'Melissa Lutz',
         },
         {
           title: 'Read Project by ID',
@@ -87,6 +94,13 @@ export class DashboardComponent {
           route: '/projects/list',
           status: 'ready',
           owner: 'Student C',
+        },
+        {
+          title: 'Update Project',
+          description: 'Update an existing project by ID.',
+          route: '/projects/update',
+          status: 'ready',
+          owner: 'Melissa Lutz',
         },
       ],
     },
