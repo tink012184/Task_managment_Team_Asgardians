@@ -1,87 +1,37 @@
 <div class="page">
   <h2>Update Task</h2>
 
-  @if (message) {
-    <div
-      class="message"
-      [class.success]="messageType === 'success'"
-      [class.error]="messageType === 'error'"
-    >
-      {{ message }}
-    </div>
-  }
+  <label for="taskId">Task ID</label>
+  <input id="taskId" type="text" name="taskId" [(ngModel)]="taskId" placeholder="Enter task ID" />
 
-  <form class="card" (submit)="loadTask($event)" novalidate>
-    <div class="row">
-      <div class="form-group">
-        <label for="taskId">Task ID</label>
-        <input
-          id="taskId"
-          name="taskId"
-          type="text"
-          [(ngModel)]="taskId"
-          placeholder="Paste the Task _id here"
-        />
-      </div>
+  <button type="button" (click)="loadTask()">Load Task</button>
 
-      <button class="btn" type="submit" [disabled]="loading">
-        @if (loading) {
-          Loading...
-        } @else {
-          Load Task
-        }
-      </button>
-    </div>
+  <p class="success" *ngIf="message">{{ message }}</p>
+  <p class="error" *ngIf="error">{{ error }}</p>
+
+  <form *ngIf="taskLoaded && task" (ngSubmit)="updateTask($event)">
+    <label for="title">Title</label>
+    <input id="title" type="text" name="title" [(ngModel)]="task.title" required />
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description" [(ngModel)]="task.description"></textarea>
+
+    <label for="status">Status</label>
+    <input id="status" type="text" name="status" [(ngModel)]="task.status" required />
+
+    <label for="priority">Priority</label>
+    <input id="priority" type="text" name="priority" [(ngModel)]="task.priority" required />
+
+    <label for="dueDate">Due Date</label>
+    <input id="dueDate" type="date" name="dueDate" [(ngModel)]="task.dueDate" />
+
+    <label for="assignedTo">Assigned To</label>
+    <input id="assignedTo" type="text" name="assignedTo" [(ngModel)]="task.assignedTo" />
+
+    <button type="submit" [disabled]="loading">
+      {{ loading ? 'Updating...' : 'Update Task' }}
+    </button>
   </form>
 
-  @if (task) {
-    <form class="card" (submit)="saveTask($event)" novalidate>
-      <div class="form-group">
-        <label for="title">Title *</label>
-        <input id="title" name="title" type="text" [(ngModel)]="task.title" required />
-      </div>
-
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea
-          id="description"
-          name="description"
-          rows="4"
-          [(ngModel)]="task.description"
-        ></textarea>
-      </div>
-
-      <div class="row">
-        <div class="form-group">
-          <label for="status">Status *</label>
-          <select id="status" name="status" [(ngModel)]="task.status" required>
-            <option value="Pending">Pending</option>
-            <option value="In Progress">In Progress</option>
-            <option value="Complete">Complete</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="priority">Priority *</label>
-          <select id="priority" name="priority" [(ngModel)]="task.priority" required>
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button class="btn primary" type="submit" [disabled]="loading">
-          @if (loading) {
-            Saving...
-          } @else {
-            Save Changes
-          }
-        </button>
-
-        <button class="btn" type="button" (click)="returnToMain()">Return to Main Page</button>
-      </div>
-    </form>
-  }
+  <button type="button" class="back-btn" (click)="returnToMain()">Return to Home Page</button>
 </div>

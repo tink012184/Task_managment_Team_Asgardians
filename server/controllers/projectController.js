@@ -63,8 +63,43 @@ const getAllProjects = async (req, res) => {
   }
 };
 
+const updateProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, description, startDate } = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid project id." });
+    }
+
+    if (!name || !description || !startDate) {
+      return res.status(400).json({
+        message: "Name, description, and start date are required.",
+      });
+    }
+
+    const updatedProject = await Project.findByIdAndUpdate(
+      id,
+      { name, description, startDate },
+      { new: true, runValidators: true },
+    );
+
+    if (!updatedProject) {
+      return res.status(404).json({ message: "Project not found." });
+    }
+
+    return res.status(200).json(updatedProject);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server error while updating project.",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createProject,
   getProjectById,
   getAllProjects,
+  updateProject,
 };

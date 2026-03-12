@@ -22,4 +22,8 @@ export class ProjectService {
   getAllProjects(): Observable<Project[]> {
     return this.http.get<Project[]>(this.apiUrl);
   }
+
+  updateProject(id: string, project: Project): Observable<Project> {
+    return this.http.put<Project>(`${this.apiUrl}/${id}`, project);
+  }
 }

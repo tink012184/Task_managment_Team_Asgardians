@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TaskService } from '../task';
 
 type MessageType = 'success' | 'error' | '';
@@ -9,18 +9,19 @@ type MessageType = 'success' | 'error' | '';
 @Component({
   selector: 'app-update-task',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './update-task.html',
-  styleUrl: './update-task.css',
+  styleUrls: ['./update-task.css'],
 })
 export class UpdateTaskComponent {
   taskId = '';
   loading = false;
+  taskLoaded = false;
 
-  // Minimal task shape (match whatever your API returns)
   task: any = null;
 
   message = '';
+  error = '';
   messageType: MessageType = '';
 
   constructor(
@@ -30,54 +31,59 @@ export class UpdateTaskComponent {
 
   clearMessage(): void {
     this.message = '';
+    this.error = '';
     this.messageType = '';
   }
 
-  loadTask(event?: Event): void {
-    event?.preventDefault();
+  loadTask(): void {
     this.clearMessage();
+    this.taskLoaded = false;
 
     const id = this.taskId.trim();
+
     if (!id) {
+      this.error = 'Task ID is required.';
       this.messageType = 'error';
-      this.message = 'Task ID is required.';
       return;
     }
 
-    this.loading = true;
-
     this.taskService.getTaskById(id).subscribe({
-      next: (res: any) => {
-        // Your API might return { task: {...} } or the object directly
-        this.task = res?.task ?? res;
-        this.loading = false;
+      next: (data: any) => {
+        console.log('Loaded task:', data);
 
-        if (!this.task) {
-          this.messageType = 'error';
-          this.message = 'Task not found.';
-        }
+        this.task = {
+          title: data.title || '',
+          description: data.description || '',
+          status: data.status || '',
+          priority: data.priority || '',
+          dueDate: data.dueDate ? data.dueDate.substring(0, 10) : '',
+          assignedTo: data.assignedTo || '',
+        };
+
+        this.taskLoaded = true;
       },
       error: (err) => {
-        this.loading = false;
+        console.error('Load task error:', err);
+        this.error = err?.error?.message || 'Failed to load task.';
         this.messageType = 'error';
-        this.message = err?.error?.message || err?.message || 'Failed to load task.';
+        this.taskLoaded = false;
       },
     });
   }
 
-  saveTask(event?: Event): void {
+  updateTask(event?: Event): void {
     event?.preventDefault();
     this.clearMessage();
 
     if (!this.taskId.trim()) {
+      this.error = 'Task ID is required.';
       this.messageType = 'error';
-      this.message = 'Task ID is required.';
       return;
     }
 
     if (!this.task?.title?.trim() || !this.task?.status || !this.task?.priority) {
+      this.error = 'Title, Status, and Priority are required.';
       this.messageType = 'error';
-      this.message = 'Title, Status, and Priority are required.';
       return;
     }
 
@@ -95,17 +101,25 @@ export class UpdateTaskComponent {
     this.taskService.updateTask(this.taskId.trim(), payload).subscribe({
       next: (res: any) => {
         this.loading = false;
+        this.message = 'Task updated successfully.';
         this.messageType = 'success';
-        this.message = '✅ Task updated successfully!';
 
-        // refresh local model from response if available
         const updated = res?.task ?? res;
-        if (updated) this.task = updated;
+        if (updated) {
+          this.task = {
+            title: updated.title || '',
+            description: updated.description || '',
+            status: updated.status || '',
+            priority: updated.priority || '',
+            dueDate: updated.dueDate ? updated.dueDate.substring(0, 10) : '',
+            assignedTo: updated.assignedTo || '',
+          };
+        }
       },
       error: (err) => {
         this.loading = false;
+        this.error = err?.error?.message || err?.message || 'Failed to update task.';
         this.messageType = 'error';
-        this.message = err?.error?.message || err?.message || 'Failed to update task.';
       },
     });
   }

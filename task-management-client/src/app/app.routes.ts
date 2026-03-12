@@ -56,4 +56,12 @@ export const routes: Routes = [
         (m) => m.ProjectListComponent,
       ),
   },
+
+  {
+    path: 'projects/update',
+    loadComponent: () =>
+      import('./features/tasks/projects/project-update/project-update').then(
+        (m) => m.ProjectUpdateComponent,
+      ),
+  },
 ];
