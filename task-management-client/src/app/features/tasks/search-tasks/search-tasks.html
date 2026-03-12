@@ -1,12 +1,20 @@
-<h2>Search Tasks</h2>
+<div class="page">
+  <h2>Search Tasks</h2>
 
-<input [(ngModel)]="query" placeholder="Search..." />
-<button (click)="search()">Search</button>
+  <label for="query">Search</label>
+  <input id="query" type="text" name="query" [(ngModel)]="query" placeholder="Enter search term" />
 
-<p *ngIf="errorMessage">{{ errorMessage }}</p>
+  <button type="button" (click)="search()">Search</button>
 
-<p *ngIf="!errorMessage && results.length === 0">No results.</p>
+  <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-<ul *ngIf="!errorMessage && results.length > 0">
-  <li *ngFor="let t of results">{{ t.title }}</li>
-</ul>
+  <ul *ngIf="results.length > 0">
+    <li *ngFor="let task of results">
+      {{ task.title }}
+    </li>
+  </ul>
+
+  <p *ngIf="hasSearched && !errorMessage && results.length === 0">No results.</p>
+
+  <button type="button" class="back-btn" routerLink="/">Return to Home Page</button>
+</div>

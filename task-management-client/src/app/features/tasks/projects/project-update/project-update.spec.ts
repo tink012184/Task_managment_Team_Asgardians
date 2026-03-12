@@ -1,10 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
+import { provideRouter } from '@angular/router';
 
 import { ProjectUpdateComponent } from './project-update';
 import { ProjectService } from '../project.service';
 
 class FakeProjectService {
+  getAllProjects() {
+    return of([
+      {
+        _id: 'proj123',
+        name: 'Project Alpha',
+        description: 'Existing project description',
+        startDate: '2026-03-12',
+      },
+    ]);
+  }
+
   getProjectById(id: string) {
     return of({
       _id: id,
@@ -30,7 +42,7 @@ describe('ProjectUpdateComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ProjectUpdateComponent],
-      providers: [{ provide: ProjectService, useClass: FakeProjectService }],
+      providers: [provideRouter([]), { provide: ProjectService, useClass: FakeProjectService }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProjectUpdateComponent);
@@ -38,20 +50,20 @@ describe('ProjectUpdateComponent', () => {
 
     projectService = TestBed.inject(ProjectService) as unknown as FakeProjectService;
 
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
-  it('should show validation message when Project ID is missing', () => {
-    component.projectId = '';
-
+  it('should show validation message when no project is selected', () => {
+    component.selectedProjectId = '';
     component.loadProject();
 
-    expect(component.error).toBe('Project ID is required.');
-    expect(component.projectLoaded).toBeFalsy();
+    expect(component.message).toBe('Please select a project.');
+    expect(component.messageType).toBe('error');
   });
 
   it('should show success message on successful update', () => {
-    component.projectId = '507f1f77bcf86cd799439011';
+    component.selectedProjectId = 'proj123';
     component.project = {
       name: 'Updated Project',
       description: 'Updated description',
@@ -61,15 +73,14 @@ describe('ProjectUpdateComponent', () => {
     component.updateProject();
 
     expect(component.message).toBe('Project updated successfully.');
-    expect(component.error).toBe('');
-    expect(component.projectLoaded).toBe(true);
+    expect(component.messageType).toBe('success');
   });
 
   it('should show error message if update service throws an error', () => {
     projectService.updateProject = () =>
       throwError(() => ({ error: { message: 'Project not found.' } }));
 
-    component.projectId = '507f1f77bcf86cd799439011';
+    component.selectedProjectId = 'proj123';
     component.project = {
       name: 'Updated Project',
       description: 'Updated description',
@@ -78,7 +89,7 @@ describe('ProjectUpdateComponent', () => {
 
     component.updateProject();
 
-    expect(component.message).toBe('');
-    expect(component.error).toBe('Project not found.');
+    expect(component.message).toBe('Project not found.');
+    expect(component.messageType).toBe('error');
   });
 });

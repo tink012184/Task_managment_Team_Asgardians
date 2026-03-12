@@ -5,8 +5,19 @@ import { provideRouter } from '@angular/router';
 import { UpdateTaskComponent } from './update-task';
 import { TaskService } from '../task';
 
-/* ✅ Manual fake service (same style as CreateTask tests) */
 class FakeTaskService {
+  getAllTasks() {
+    return of([
+      {
+        _id: 'abc123',
+        title: 'Existing Task',
+        description: 'Existing Description',
+        status: 'Pending',
+        priority: 'Low',
+      },
+    ]);
+  }
+
   getTaskById(id: string) {
     return of({
       _id: id,
@@ -41,20 +52,20 @@ describe('UpdateTaskComponent', () => {
 
     taskService = TestBed.inject(TaskService) as unknown as FakeTaskService;
 
+    fixture.detectChanges();
     await fixture.whenStable();
   });
 
-  // ✅ TEST 1: Load validation
-  it('should show validation message when Task ID is missing', () => {
-    component.taskId = '';
+  it('should show validation message when no task is selected', () => {
+    component.selectedTaskId = '';
     component.loadTask();
 
-    expect(component.message).toBe('Task ID is required.');
+    expect(component.message).toBe('Please select a task.');
+    expect(component.messageType).toBe('error');
   });
 
-  // ✅ TEST 2: Successful update
   it('should show success message on successful update', () => {
-    component.taskId = 'abc123';
+    component.selectedTaskId = 'abc123';
     component.task = {
       title: 'Updated Title',
       description: 'Updated Description',
@@ -68,12 +79,10 @@ describe('UpdateTaskComponent', () => {
     expect(component.messageType).toBe('success');
   });
 
-  // ✅ TEST 3: Error on update
   it('should show error message if update service throws an error', () => {
-    // override only this test (same as your CreateTask pattern)
     taskService.updateTask = () => throwError(() => ({ error: { message: 'Server error' } }));
 
-    component.taskId = 'abc123';
+    component.selectedTaskId = 'abc123';
     component.task = {
       title: 'Updated Title',
       description: 'Updated Description',
