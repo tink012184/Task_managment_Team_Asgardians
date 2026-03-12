@@ -19,17 +19,24 @@ describe('ProjectCreateComponent', () => {
   let component: ProjectCreateComponent;
 
   let createProjectSpy: ReturnType<typeof makeSpy>;
+  let navigateSpy: ReturnType<typeof makeSpy>;
 
   let projectServiceStub: Partial<ProjectService>;
+  let routerStub: Partial<Router>;
 
   beforeEach(() => {
     createProjectSpy = makeSpy();
+    navigateSpy = makeSpy();
 
     projectServiceStub = {
       createProject: createProjectSpy as any,
     };
 
-    component = new ProjectCreateComponent(projectServiceStub as ProjectService);
+    routerStub = {
+      navigate: navigateSpy as any,
+    };
+
+    component = new ProjectCreateComponent(projectServiceStub as ProjectService, routerStub as Router);
   });
 
   it('does not call service when required fields are missing', () => {
