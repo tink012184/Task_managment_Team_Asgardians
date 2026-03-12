@@ -2,14 +2,20 @@
   <h2>Update Task</h2>
 
   <label for="taskSelect">Select Task</label>
-  <select id="taskSelect" name="taskSelect" [(ngModel)]="selectedTaskId">
-    <option value="">-- Select a Task --</option>
+  <select
+    id="taskSelect"
+    name="taskSelect"
+    [(ngModel)]="selectedTaskId"
+    (ngModelChange)="onTaskSelected()"
+    [disabled]="loadingTasks"
+  >
+    <option value="">
+      {{ loadingTasks ? 'Loading tasks...' : '-- Select a Task --' }}
+    </option>
     <option *ngFor="let item of tasks" [value]="item._id">
       {{ item.title }}
     </option>
   </select>
-
-  <button type="button" (click)="loadTask()">Load Task</button>
 
   <p class="success" *ngIf="messageType === 'success'">{{ message }}</p>
   <p class="error" *ngIf="messageType === 'error'">{{ message }}</p>

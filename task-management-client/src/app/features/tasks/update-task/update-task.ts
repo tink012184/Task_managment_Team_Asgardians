@@ -19,6 +19,7 @@ export class UpdateTaskComponent implements OnInit {
   tasks: Task[] = [];
   selectedTaskId = '';
   loading = false;
+  loadingTasks = false;
   taskLoaded = false;
 
   task: Partial<Task> = {
@@ -47,15 +48,37 @@ export class UpdateTaskComponent implements OnInit {
   }
 
   loadTasks(): void {
+    this.clearMessage();
+    this.loadingTasks = true;
+    this.tasks = [];
+
     this.taskService.getAllTasks().subscribe({
       next: (tasks: Task[]) => {
         this.tasks = tasks;
+        this.loadingTasks = false;
       },
       error: (err: any) => {
+        this.loadingTasks = false;
         this.message = err?.error?.message || 'Failed to load tasks.';
         this.messageType = 'error';
       },
     });
+  }
+
+  onTaskSelected(): void {
+    if (!this.selectedTaskId) {
+      this.taskLoaded = false;
+      this.task = {
+        title: '',
+        description: '',
+        status: '',
+        priority: '',
+        dueDate: '',
+      };
+      return;
+    }
+
+    this.loadTask();
   }
 
   loadTask(): void {
