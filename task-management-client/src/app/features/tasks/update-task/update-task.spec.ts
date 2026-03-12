@@ -62,7 +62,7 @@ describe('UpdateTaskComponent', () => {
       priority: 'High',
     } as any;
 
-    component.saveTask();
+    component.updateTask();
 
     expect(component.message).toBe('✅ Task updated successfully!');
     expect(component.messageType).toBe('success');
@@ -81,7 +81,7 @@ describe('UpdateTaskComponent', () => {
       priority: 'High',
     } as any;
 
-    component.saveTask();
+    component.updateTask();
 
     expect(component.message).toBe('Server error');
     expect(component.messageType).toBe('error');

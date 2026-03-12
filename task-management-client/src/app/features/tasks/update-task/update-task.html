@@ -6,8 +6,8 @@
 
   <button type="button" (click)="loadTask()">Load Task</button>
 
-  <p class="success" *ngIf="message">{{ message }}</p>
-  <p class="error" *ngIf="error">{{ error }}</p>
+  <p class="success" *ngIf="messageType === 'success'">{{ message }}</p>
+  <p class="error" *ngIf="messageType === 'error'">{{ message }}</p>
 
   <form *ngIf="taskLoaded && task" (ngSubmit)="updateTask($event)">
     <label for="title">Title</label>

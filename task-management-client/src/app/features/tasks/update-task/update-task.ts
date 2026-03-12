@@ -42,7 +42,7 @@ export class UpdateTaskComponent {
     const id = this.taskId.trim();
 
     if (!id) {
-      this.error = 'Task ID is required.';
+      this.message = 'Task ID is required.';
       this.messageType = 'error';
       return;
     }
@@ -101,7 +101,7 @@ export class UpdateTaskComponent {
     this.taskService.updateTask(this.taskId.trim(), payload).subscribe({
       next: (res: any) => {
         this.loading = false;
-        this.message = 'Task updated successfully.';
+        this.message = '✅ Task updated successfully!';
         this.messageType = 'success';
 
         const updated = res?.task ?? res;
@@ -118,7 +118,7 @@ export class UpdateTaskComponent {
       },
       error: (err) => {
         this.loading = false;
-        this.error = err?.error?.message || err?.message || 'Failed to update task.';
+        this.message = err?.error?.message || err?.message || 'Server error';
         this.messageType = 'error';
       },
     });
