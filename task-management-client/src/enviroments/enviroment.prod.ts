@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
-  taskApiUrl: 'http://localhost:3000/api/tasks',
-  projectApiUrl: 'http://localhost:3000/api/projects',
+  production: true,
+  taskApiUrl: 'https://task-managment-team-asgardians-server.onrender.com/api/tasks',
+  projectApiUrl: 'https://task-managment-team-asgardians-server.onrender.com/api/projects',
 };
