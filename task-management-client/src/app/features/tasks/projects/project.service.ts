@@ -7,7 +7,7 @@ import { Project } from './projects.model';
   providedIn: 'root',
 })
 export class ProjectService {
-  private apiUrl = 'https://task-managment-team-asgardians-server.onrender.com/api/tasks';
+  private apiUrl = 'https://task-managment-team-asgardians-server.onrender.com/api/projects';
   constructor(private http: HttpClient) {}
 
   createProject(project: Project): Observable<Project> {
