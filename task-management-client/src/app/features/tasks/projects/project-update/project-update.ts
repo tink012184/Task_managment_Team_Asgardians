@@ -78,13 +78,14 @@ export class ProjectUpdateComponent {
     }
 
     this.projectService.updateProject(id, this.project).subscribe({
-      next: (project) => {
+      next: (project: any) => {
         this.project = {
           name: project.name,
           description: project.description,
           startDate: project.startDate,
           _id: project._id,
         };
+
         this.projectLoaded = true;
         this.message = 'Project updated successfully.';
       },
