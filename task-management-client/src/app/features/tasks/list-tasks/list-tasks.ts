@@ -18,11 +18,11 @@ export class ListTasksComponent {
   tasks$: Observable<Task[]>;
 
   constructor(private taskService: TaskService) {
-    this.tasks$ = this.taskService.getAllTasks().pipe(
+    this.tasks$ = this.taskService.getTasks().pipe(
       catchError(() => {
         this.errorMessage = 'Failed to load tasks.';
         return of([]);
-      })
+      }),
     );
   }
 }

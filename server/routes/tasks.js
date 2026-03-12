@@ -13,10 +13,13 @@ const {
 // CREATE
 router.post("/", createTask);
 
-// READ ALL  ✅ THIS FIXES YOUR ERROR
+// GET ALL TASKS
 router.get("/", getAllTasks);
 
-// READ BY ID
+// SEARCH
+router.get("/search", searchTasks);
+
+// GET BY ID
 router.get("/:id", getTaskById);
 
 // UPDATE
@@ -24,8 +27,5 @@ router.put("/:id", updateTask);
 
 // DELETE
 router.delete("/:id", deleteTask);
-
-//SEARCH
-router.get("/:id", searchTasks);
 
 module.exports = router;

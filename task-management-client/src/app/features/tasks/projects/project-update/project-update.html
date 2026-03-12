@@ -1,31 +1,51 @@
-<div class="page">
-  <h2>Update Project</h2>
+<div class="project-update-container">
+  <div class="header">
+    <button class="back-button" type="button" (click)="returnToMain()">← Back to Main</button>
+    <h2>Update Project</h2>
+  </div>
 
-  <label for="projectSelect">Select Project</label>
-  <select id="projectSelect" name="projectSelect" [(ngModel)]="selectedProjectId">
-    <option value="">-- Select a Project --</option>
-    <option *ngFor="let item of projects" [value]="item._id">
-      {{ item.name }}
-    </option>
-  </select>
+  <div class="message success" *ngIf="message && messageType === 'success'">
+    {{ message }}
+  </div>
 
-  <button type="button" (click)="loadProject()">Load Project</button>
+  <div class="message error" *ngIf="message && messageType === 'error'">
+    {{ message }}
+  </div>
 
-  <p class="success" *ngIf="messageType === 'success'">{{ message }}</p>
-  <p class="error" *ngIf="messageType === 'error'">{{ message }}</p>
+  <div class="form-group">
+    <label for="projectSelect">Select a Project</label>
+    <select id="projectSelect" name="projectSelect" [(ngModel)]="selectedProjectId">
+      <option value="">
+        {{ loadingProjects ? 'Loading projects...' : '-- Select a Project --' }}
+      </option>
+      <option *ngFor="let project of projects" [value]="project._id">
+        {{ project.name }}
+      </option>
+    </select>
+  </div>
+
+  <button type="button" (click)="loadProject()" [disabled]="!selectedProjectId || loadingProject">
+    {{ loadingProject ? 'Loading Project...' : 'Load Project' }}
+  </button>
 
   <form *ngIf="projectLoaded" (ngSubmit)="updateProject()">
-    <label for="name">Project Name</label>
-    <input id="name" type="text" name="name" [(ngModel)]="project.name" required />
+    <div class="form-group">
+      <label for="name">Project Name</label>
+      <input id="name" name="name" [(ngModel)]="project.name" />
+    </div>
 
-    <label for="description">Description</label>
-    <textarea id="description" name="description" [(ngModel)]="project.description"></textarea>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" [(ngModel)]="project.description"></textarea>
+    </div>
 
-    <label for="startDate">Start Date</label>
-    <input id="startDate" type="date" name="startDate" [(ngModel)]="project.startDate" />
+    <div class="form-group">
+      <label for="startDate">Start Date</label>
+      <input id="startDate" name="startDate" type="date" [(ngModel)]="project.startDate" />
+    </div>
 
-    <button type="submit">Update Project</button>
+    <button type="submit" [disabled]="submitting">
+      {{ submitting ? 'Updating...' : 'Update Project' }}
+    </button>
   </form>
-
-  <button type="button" class="back-btn" (click)="returnToMain()">Return to Home Page</button>
 </div>

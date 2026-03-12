@@ -1,10 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ProjectService } from '../project.service';
 
 type MessageType = 'success' | 'error' | '';
+
+interface Project {
+  _id?: string;
+  name: string;
+  description: string;
+  startDate: string;
+}
 
 @Component({
   selector: 'app-project-update',
@@ -14,12 +22,15 @@ type MessageType = 'success' | 'error' | '';
   styleUrls: ['./project-update.css'],
 })
 export class ProjectUpdateComponent implements OnInit {
-  projects: any[] = [];
+  projects: Project[] = [];
   selectedProjectId = '';
-  loading = false;
+
+  loadingProjects = false;
+  loadingProject = false;
+  submitting = false;
   projectLoaded = false;
 
-  project: any = {
+  project: Project = {
     name: '',
     description: '',
     startDate: '',
@@ -31,6 +42,7 @@ export class ProjectUpdateComponent implements OnInit {
   constructor(
     private projectService: ProjectService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit(): void {
@@ -43,13 +55,22 @@ export class ProjectUpdateComponent implements OnInit {
   }
 
   loadProjects(): void {
+    this.loadingProjects = true;
+    this.clearMessage();
+    this.cdr.detectChanges();
+
     this.projectService.getAllProjects().subscribe({
-      next: (projects: any[]) => {
+      next: (projects: Project[]) => {
         this.projects = projects;
+        this.loadingProjects = false;
+        this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load projects:', err);
         this.message = 'Failed to load projects.';
         this.messageType = 'error';
+        this.loadingProjects = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -61,21 +82,31 @@ export class ProjectUpdateComponent implements OnInit {
     if (!this.selectedProjectId) {
       this.message = 'Please select a project.';
       this.messageType = 'error';
+      this.cdr.detectChanges();
       return;
     }
 
+    this.loadingProject = true;
+    this.cdr.detectChanges();
+
     this.projectService.getProjectById(this.selectedProjectId).subscribe({
-      next: (project: any) => {
+      next: (project: Project) => {
         this.project = {
+          _id: project._id,
           name: project.name || '',
           description: project.description || '',
-          startDate: project.startDate ? project.startDate.substring(0, 10) : '',
+          startDate: project.startDate ? String(project.startDate).substring(0, 10) : '',
         };
         this.projectLoaded = true;
+        this.loadingProject = false;
+        this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to load project:', err);
         this.message = err?.error?.message || 'Failed to load project.';
         this.messageType = 'error';
+        this.loadingProject = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -86,18 +117,27 @@ export class ProjectUpdateComponent implements OnInit {
     if (!this.selectedProjectId) {
       this.message = 'Please select a project.';
       this.messageType = 'error';
+      this.cdr.detectChanges();
       return;
     }
+
+    this.submitting = true;
+    this.cdr.detectChanges();
 
     this.projectService.updateProject(this.selectedProjectId, this.project).subscribe({
       next: () => {
         this.message = 'Project updated successfully.';
         this.messageType = 'success';
+        this.submitting = false;
         this.loadProjects();
+        this.cdr.detectChanges();
       },
-      error: (err) => {
+      error: (err: HttpErrorResponse) => {
+        console.error('Failed to update project:', err);
         this.message = err?.error?.message || 'Failed to update project.';
         this.messageType = 'error';
+        this.submitting = false;
+        this.cdr.detectChanges();
       },
     });
   }
