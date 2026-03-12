@@ -6,6 +6,7 @@ const {
   getProjectById,
   getAllProjects,
   updateProject,
+  deleteProject,
 } = require("../controllers/projectController");
 
 // List all projects (Student C)
@@ -19,5 +20,8 @@ router.get("/:id", getProjectById);
 
 // Update project (Student A)
 router.put("/:id", updateProject);
+
+// Delete project (Student B)
+router.delete("/:id", deleteProject);
 
 module.exports = router;

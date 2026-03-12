@@ -64,4 +64,11 @@ export const routes: Routes = [
         (m) => m.ProjectUpdateComponent,
       ),
   },
+  {
+    path: 'projects/delete',
+    loadComponent: () =>
+      import('./features/tasks/projects/project-delete/project-delete').then(
+        (m) => m.ProjectDeleteComponent,
+      ),
+  },
 ];

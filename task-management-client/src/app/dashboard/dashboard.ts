@@ -102,6 +102,13 @@ export class DashboardComponent {
           status: 'ready',
           owner: 'Melissa Lutz',
         },
+        {
+          title: 'Delete Project by ID',
+          description: 'Delete an existing project by ID.',
+          route: '/projects/delete',
+          status: 'ready',
+          owner: 'Student B',
+        },
       ],
     },
     {
