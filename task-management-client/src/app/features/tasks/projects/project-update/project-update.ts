@@ -1,97 +1,108 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import { ProjectService } from '../project.service';
-import { Project } from '../projects.model';
-import { Router } from '@angular/router';
+
+type MessageType = 'success' | 'error' | '';
 
 @Component({
   selector: 'app-project-update',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './project-update.html',
   styleUrls: ['./project-update.css'],
 })
-export class ProjectUpdateComponent {
-  projectId = '';
-  project: Project = {
+export class ProjectUpdateComponent implements OnInit {
+  projects: any[] = [];
+  selectedProjectId = '';
+  loading = false;
+  projectLoaded = false;
+
+  project: any = {
     name: '',
     description: '',
     startDate: '',
   };
 
-  projectLoaded = false;
   message = '';
-  error = '';
+  messageType: MessageType = '';
 
   constructor(
     private projectService: ProjectService,
     private router: Router,
   ) {}
 
-  goHome() {
-    this.router.navigateByUrl('/');
+  ngOnInit(): void {
+    this.loadProjects();
+  }
+
+  clearMessage(): void {
+    this.message = '';
+    this.messageType = '';
+  }
+
+  loadProjects(): void {
+    this.projectService.getAllProjects().subscribe({
+      next: (projects: any[]) => {
+        this.projects = projects;
+      },
+      error: () => {
+        this.message = 'Failed to load projects.';
+        this.messageType = 'error';
+      },
+    });
   }
 
   loadProject(): void {
-    this.message = '';
-    this.error = '';
+    this.clearMessage();
+    this.projectLoaded = false;
 
-    if (!this.projectId.trim()) {
-      this.error = 'Project ID is required.';
+    if (!this.selectedProjectId) {
+      this.message = 'Please select a project.';
+      this.messageType = 'error';
       return;
     }
 
-    this.projectService.getProjectById(this.projectId).subscribe({
-      next: (data: any) => {
-        console.log('Loaded project:', data);
-
+    this.projectService.getProjectById(this.selectedProjectId).subscribe({
+      next: (project: any) => {
         this.project = {
-          name: data.name || '',
-          description: data.description || '',
-          startDate: data.startDate ? data.startDate.substring(0, 10) : '',
+          name: project.name || '',
+          description: project.description || '',
+          startDate: project.startDate ? project.startDate.substring(0, 10) : '',
         };
-
         this.projectLoaded = true;
       },
       error: (err) => {
-        console.error(err);
-        this.error = err?.error?.message || 'Failed to load project.';
-        this.projectLoaded = false;
+        this.message = err?.error?.message || 'Failed to load project.';
+        this.messageType = 'error';
       },
     });
   }
 
   updateProject(): void {
-    this.message = '';
-    this.error = '';
+    this.clearMessage();
 
-    const id = this.projectId.trim();
-    if (!id) {
-      this.error = 'Project ID is required.';
+    if (!this.selectedProjectId) {
+      this.message = 'Please select a project.';
+      this.messageType = 'error';
       return;
     }
 
-    if (!this.project.name || !this.project.description || !this.project.startDate) {
-      this.error = 'All fields are required.';
-      return;
-    }
-
-    this.projectService.updateProject(id, this.project).subscribe({
-      next: (project: any) => {
-        this.project = {
-          name: project.name,
-          description: project.description,
-          startDate: project.startDate,
-          _id: project._id,
-        };
-
-        this.projectLoaded = true;
+    this.projectService.updateProject(this.selectedProjectId, this.project).subscribe({
+      next: () => {
         this.message = 'Project updated successfully.';
+        this.messageType = 'success';
+        this.loadProjects();
       },
       error: (err) => {
-        this.error = err?.error?.message || 'Failed to update project.';
+        this.message = err?.error?.message || 'Failed to update project.';
+        this.messageType = 'error';
       },
     });
+  }
+
+  returnToMain(): void {
+    this.router.navigate(['/']);
   }
 }

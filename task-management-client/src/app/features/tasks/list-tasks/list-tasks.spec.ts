@@ -2,8 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { ListTasksComponent } from './list-tasks';
+import { environment } from '../../../../enviroments/enviroment';
 
 describe('ListTasksComponent', () => {
+  let component: ListTasksComponent;
   let fixture: ComponentFixture<ListTasksComponent>;
   let httpMock: HttpTestingController;
 
@@ -13,6 +15,7 @@ describe('ListTasksComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(ListTasksComponent);
+    component = fixture.componentInstance;
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -22,43 +25,39 @@ describe('ListTasksComponent', () => {
 
   it('should create', () => {
     fixture.detectChanges();
-    const req = httpMock.expectOne(
-      'https://task-managment-team-asgardians-server.onrender.com/api/tasks',
-    );
+
+    const req = httpMock.expectOne(environment.taskApiUrl);
+    expect(req.request.method).toBe('GET');
     req.flush([]);
-    fixture.detectChanges();
-    expect(fixture.componentInstance).toBeTruthy();
+
+    expect(component).toBeTruthy();
   });
 
   it('should render task titles when API returns tasks', () => {
     fixture.detectChanges();
 
-    const req = httpMock.expectOne(
-      'https://task-managment-team-asgardians-server.onrender.com/api/tasks',
-    );
+    const req = httpMock.expectOne(environment.taskApiUrl);
     req.flush([
-      { _id: '1', title: 'Task A', status: 'Pending', priority: 'Low' },
-      { _id: '2', title: 'Task B', status: 'In Progress', priority: 'High' },
+      { _id: '1', title: 'Task One', description: '', status: 'Pending', priority: 'Low' },
+      { _id: '2', title: 'Task Two', description: '', status: 'Done', priority: 'High' },
     ]);
 
     fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
 
-    const el: HTMLElement = fixture.nativeElement;
-    expect(el.textContent).toContain('Task A');
-    expect(el.textContent).toContain('Task B');
+    expect(compiled.textContent).toContain('Task One');
+    expect(compiled.textContent).toContain('Task Two');
   });
 
   it('should show "No tasks found." when API returns empty array', () => {
     fixture.detectChanges();
 
-    const req = httpMock.expectOne(
-      'https://task-managment-team-asgardians-server.onrender.com/api/tasks',
-    );
+    const req = httpMock.expectOne(environment.taskApiUrl);
     req.flush([]);
 
     fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
 
-    const el: HTMLElement = fixture.nativeElement;
-    expect(el.textContent).toContain('No tasks found.');
+    expect(compiled.textContent).toContain('No tasks found.');
   });
 });

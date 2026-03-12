@@ -16,23 +16,24 @@ export class SearchTasksComponent {
   query = '';
   results: Task[] = [];
   errorMessage = '';
+  hasSearched = false;
 
   constructor(private taskService: TaskService) {}
 
   search(): void {
     this.errorMessage = '';
+    this.results = [];
+    this.hasSearched = false;
 
     this.taskService.searchTasks(this.query).subscribe({
       next: (tasks: Task[]) => {
-        setTimeout(() => {
-          this.results = tasks;
-        }, 0);
+        this.results = tasks;
+        this.hasSearched = true;
       },
       error: (_err: any) => {
-        setTimeout(() => {
-          this.errorMessage = 'Failed to search tasks.';
-          this.results = [];
-        }, 0);
+        this.errorMessage = 'Failed to search tasks.';
+        this.results = [];
+        this.hasSearched = true;
       },
     });
   }

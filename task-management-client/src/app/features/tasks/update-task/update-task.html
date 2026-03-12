@@ -1,8 +1,13 @@
 <div class="page">
   <h2>Update Task</h2>
 
-  <label for="taskId">Task ID</label>
-  <input id="taskId" type="text" name="taskId" [(ngModel)]="taskId" placeholder="Enter task ID" />
+  <label for="taskSelect">Select Task</label>
+  <select id="taskSelect" name="taskSelect" [(ngModel)]="selectedTaskId">
+    <option value="">-- Select a Task --</option>
+    <option *ngFor="let item of tasks" [value]="item._id">
+      {{ item.title }}
+    </option>
+  </select>
 
   <button type="button" (click)="loadTask()">Load Task</button>
 

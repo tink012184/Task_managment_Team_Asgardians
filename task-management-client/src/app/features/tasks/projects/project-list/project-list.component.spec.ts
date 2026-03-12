@@ -2,8 +2,10 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { ProjectListComponent } from './project-list.component';
+import { environment } from '../../../../../enviroments/enviroment';
 
 describe('ProjectListComponent', () => {
+  let component: ProjectListComponent;
   let fixture: ComponentFixture<ProjectListComponent>;
   let httpMock: HttpTestingController;
 
@@ -13,6 +15,7 @@ describe('ProjectListComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProjectListComponent);
+    component = fixture.componentInstance;
     httpMock = TestBed.inject(HttpTestingController);
   });
 
@@ -22,30 +25,39 @@ describe('ProjectListComponent', () => {
 
   it('should create', () => {
     fixture.detectChanges();
-    const req = httpMock.expectOne('http://localhost:3000/api/projects');
+
+    const req = httpMock.expectOne(environment.projectApiUrl);
+    expect(req.request.method).toBe('GET');
     req.flush([]);
-    fixture.detectChanges();
-    expect(fixture.componentInstance).toBeTruthy();
+
+    expect(component).toBeTruthy();
   });
 
   it('should render project names when API returns projects', () => {
     fixture.detectChanges();
-    const req = httpMock.expectOne('http://localhost:3000/api/projects');
-    req.flush([{ _id: '1', name: 'Project A' }, { _id: '2', name: 'Project B' }]);
-    fixture.detectChanges();
 
-    const el: HTMLElement = fixture.nativeElement;
-    expect(el.textContent).toContain('Project A');
-    expect(el.textContent).toContain('Project B');
+    const req = httpMock.expectOne(environment.projectApiUrl);
+    req.flush([
+      { _id: '1', name: 'Project Alpha', description: 'Desc A', startDate: '2026-03-12' },
+      { _id: '2', name: 'Project Beta', description: 'Desc B', startDate: '2026-03-13' },
+    ]);
+
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.textContent).toContain('Project Alpha');
+    expect(compiled.textContent).toContain('Project Beta');
   });
 
-  it('should show \"No projects found.\" when API returns empty', () => {
-    fixture.detectChanges();
-    const req = httpMock.expectOne('http://localhost:3000/api/projects');
-    req.flush([]);
+  it('should show "No projects found." when API returns empty', () => {
     fixture.detectChanges();
 
-    const el: HTMLElement = fixture.nativeElement;
-    expect(el.textContent).toContain('No projects found.');
+    const req = httpMock.expectOne(environment.projectApiUrl);
+    req.flush([]);
+
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.textContent).toContain('No projects found.');
   });
 });

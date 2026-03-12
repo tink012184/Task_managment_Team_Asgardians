@@ -1,25 +1,31 @@
 <div class="page">
   <h2>Update Project</h2>
 
-  <label for="projectId">Project ID</label>
-  <input id="projectId" type="text" [(ngModel)]="projectId" name="projectId" />
+  <label for="projectSelect">Select Project</label>
+  <select id="projectSelect" name="projectSelect" [(ngModel)]="selectedProjectId">
+    <option value="">-- Select a Project --</option>
+    <option *ngFor="let item of projects" [value]="item._id">
+      {{ item.name }}
+    </option>
+  </select>
 
   <button type="button" (click)="loadProject()">Load Project</button>
 
-  <p *ngIf="error">{{ error }}</p>
-  <p *ngIf="message">{{ message }}</p>
+  <p class="success" *ngIf="messageType === 'success'">{{ message }}</p>
+  <p class="error" *ngIf="messageType === 'error'">{{ message }}</p>
 
   <form *ngIf="projectLoaded" (ngSubmit)="updateProject()">
-    <label for="name">Name</label>
-    <input id="name" type="text" [(ngModel)]="project.name" name="name" />
+    <label for="name">Project Name</label>
+    <input id="name" type="text" name="name" [(ngModel)]="project.name" required />
 
     <label for="description">Description</label>
-    <textarea id="description" [(ngModel)]="project.description" name="description"></textarea>
+    <textarea id="description" name="description" [(ngModel)]="project.description"></textarea>
 
     <label for="startDate">Start Date</label>
-    <input id="startDate" type="date" [(ngModel)]="project.startDate" name="startDate" />
+    <input id="startDate" type="date" name="startDate" [(ngModel)]="project.startDate" />
 
     <button type="submit">Update Project</button>
   </form>
-  <button type="button" class="btn btn-secondary" (click)="goHome()">Cancel</button>
+
+  <button type="button" class="back-btn" (click)="returnToMain()">Return to Home Page</button>
 </div>

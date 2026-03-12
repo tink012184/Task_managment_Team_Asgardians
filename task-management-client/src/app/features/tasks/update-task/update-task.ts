@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { TaskService } from '../task';
+import { Task } from '../models/task';
 
 type MessageType = 'success' | 'error' | '';
 
@@ -13,15 +14,15 @@ type MessageType = 'success' | 'error' | '';
   templateUrl: './update-task.html',
   styleUrls: ['./update-task.css'],
 })
-export class UpdateTaskComponent {
-  taskId = '';
+export class UpdateTaskComponent implements OnInit {
+  tasks: Task[] = [];
+  selectedTaskId = '';
   loading = false;
   taskLoaded = false;
 
   task: any = null;
 
   message = '';
-  error = '';
   messageType: MessageType = '';
 
   constructor(
@@ -29,28 +30,39 @@ export class UpdateTaskComponent {
     private router: Router,
   ) {}
 
+  ngOnInit(): void {
+    this.loadTasks();
+  }
+
   clearMessage(): void {
     this.message = '';
-    this.error = '';
     this.messageType = '';
+  }
+
+  loadTasks(): void {
+    this.taskService.getAllTasks().subscribe({
+      next: (tasks) => {
+        this.tasks = tasks;
+      },
+      error: () => {
+        this.message = 'Failed to load tasks.';
+        this.messageType = 'error';
+      },
+    });
   }
 
   loadTask(): void {
     this.clearMessage();
     this.taskLoaded = false;
 
-    const id = this.taskId.trim();
-
-    if (!id) {
-      this.message = 'Task ID is required.';
+    if (!this.selectedTaskId) {
+      this.message = 'Please select a task.';
       this.messageType = 'error';
       return;
     }
 
-    this.taskService.getTaskById(id).subscribe({
+    this.taskService.getTaskById(this.selectedTaskId).subscribe({
       next: (data: any) => {
-        console.log('Loaded task:', data);
-
         this.task = {
           title: data.title || '',
           description: data.description || '',
@@ -59,14 +71,11 @@ export class UpdateTaskComponent {
           dueDate: data.dueDate ? data.dueDate.substring(0, 10) : '',
           assignedTo: data.assignedTo || '',
         };
-
         this.taskLoaded = true;
       },
       error: (err) => {
-        console.error('Load task error:', err);
-        this.error = err?.error?.message || 'Failed to load task.';
+        this.message = err?.error?.message || 'Failed to load task.';
         this.messageType = 'error';
-        this.taskLoaded = false;
       },
     });
   }
@@ -75,14 +84,14 @@ export class UpdateTaskComponent {
     event?.preventDefault();
     this.clearMessage();
 
-    if (!this.taskId.trim()) {
-      this.error = 'Task ID is required.';
+    if (!this.selectedTaskId) {
+      this.message = 'Please select a task.';
       this.messageType = 'error';
       return;
     }
 
     if (!this.task?.title?.trim() || !this.task?.status || !this.task?.priority) {
-      this.error = 'Title, Status, and Priority are required.';
+      this.message = 'Title, Status, and Priority are required.';
       this.messageType = 'error';
       return;
     }
@@ -98,7 +107,7 @@ export class UpdateTaskComponent {
 
     this.loading = true;
 
-    this.taskService.updateTask(this.taskId.trim(), payload).subscribe({
+    this.taskService.updateTask(this.selectedTaskId, payload).subscribe({
       next: (res: any) => {
         this.loading = false;
         this.message = '✅ Task updated successfully!';
@@ -115,10 +124,12 @@ export class UpdateTaskComponent {
             assignedTo: updated.assignedTo || '',
           };
         }
+
+        this.loadTasks();
       },
       error: (err) => {
         this.loading = false;
-        this.message = err?.error?.message || err?.message || 'Server error';
+        this.message = err?.error?.message || err?.message || 'Failed to update task.';
         this.messageType = 'error';
       },
     });
