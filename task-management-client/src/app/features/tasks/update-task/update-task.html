@@ -14,7 +14,7 @@
   <p class="success" *ngIf="messageType === 'success'">{{ message }}</p>
   <p class="error" *ngIf="messageType === 'error'">{{ message }}</p>
 
-  <form *ngIf="taskLoaded && task" (ngSubmit)="updateTask($event)">
+  <form *ngIf="taskLoaded" (ngSubmit)="updateTask($event)">
     <label for="title">Title</label>
     <input id="title" type="text" name="title" [(ngModel)]="task.title" required />
 
@@ -29,9 +29,6 @@
 
     <label for="dueDate">Due Date</label>
     <input id="dueDate" type="date" name="dueDate" [(ngModel)]="task.dueDate" />
-
-    <label for="assignedTo">Assigned To</label>
-    <input id="assignedTo" type="text" name="assignedTo" [(ngModel)]="task.assignedTo" />
 
     <button type="submit" [disabled]="loading">
       {{ loading ? 'Updating...' : 'Update Task' }}

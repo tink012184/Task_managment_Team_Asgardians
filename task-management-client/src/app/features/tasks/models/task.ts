@@ -2,8 +2,8 @@ export interface Task {
   _id?: string;
   title: string;
   description?: string;
-  status: 'Pending' | 'In Progress' | 'Completed';
-  priority: 'Low' | 'Medium' | 'High';
+  status: string;
+  priority: string;
   dueDate?: string;
-  projectId?: number;
+  assignedTo?: string;
 }
