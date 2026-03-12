@@ -10,7 +10,18 @@ const projectRoutes = require("./routes/projectRoutes");
 const app = express();
 
 // Allow Angular dev server to call the API
-app.use(cors({ origin: "http://localhost:4200" }));
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: [
+      "http://localhost:4200",
+      "https://task-managment-team-asgardians.onrender.com",
+    ],
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 // API routes
