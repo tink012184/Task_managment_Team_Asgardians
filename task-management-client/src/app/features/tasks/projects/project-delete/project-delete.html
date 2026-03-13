@@ -1,0 +1,22 @@
+<div class="page">
+  <div class="card">
+    <h1 class="page-title">Delete Project by ID</h1>
+
+    <div class="form-group">
+      <label for="projectId">Project ID</label>
+      <input
+        id="projectId"
+        type="text"
+        class="input"
+        [(ngModel)]="projectId"
+        placeholder="Enter project ID"
+      />
+    </div>
+
+    <div class="button-row">
+      <button type="button" class="btn btn-primary" (click)="onDelete()">Delete Project</button>
+    </div>
+
+    <p *ngIf="message">{{ message }}</p>
+  </div>
+</div>

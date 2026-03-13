@@ -97,9 +97,33 @@ const updateProject = async (req, res) => {
   }
 };
 
+const deleteProject = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid project id." });
+    }
+
+    const deletedProject = await Project.findByIdAndDelete(id);
+
+    if (!deletedProject) {
+      return res.status(404).json({ message: "Project not found." });
+    }
+
+    return res.status(200).json({ message: "Project deleted successfully." });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server error while deleting project.",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   createProject,
   getProjectById,
   getAllProjects,
   updateProject,
+  deleteProject,
 };
