@@ -6,7 +6,7 @@ import { UpdateTaskComponent } from './update-task';
 import { TaskService } from '../task';
 
 class FakeTaskService {
-  getAllTasks() {
+  getTasks() {
     return of([
       {
         _id: 'abc123',
@@ -16,6 +16,10 @@ class FakeTaskService {
         priority: 'Low',
       },
     ]);
+  }
+
+  getAllTasks() {
+    return this.getTasks();
   }
 
   getTaskById(id: string) {
@@ -49,7 +53,6 @@ describe('UpdateTaskComponent', () => {
 
     fixture = TestBed.createComponent(UpdateTaskComponent);
     component = fixture.componentInstance;
-
     taskService = TestBed.inject(TaskService) as unknown as FakeTaskService;
 
     fixture.detectChanges();
@@ -67,6 +70,7 @@ describe('UpdateTaskComponent', () => {
   it('should show success message on successful update', () => {
     component.selectedTaskId = 'abc123';
     component.task = {
+      _id: 'abc123',
       title: 'Updated Title',
       description: 'Updated Description',
       status: 'In Progress',
@@ -84,6 +88,7 @@ describe('UpdateTaskComponent', () => {
 
     component.selectedTaskId = 'abc123';
     component.task = {
+      _id: 'abc123',
       title: 'Updated Title',
       description: 'Updated Description',
       status: 'In Progress',

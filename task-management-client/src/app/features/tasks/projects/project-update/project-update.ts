@@ -22,6 +22,10 @@ interface Project {
   styleUrls: ['./project-update.css'],
 })
 export class ProjectUpdateComponent implements OnInit {
+  loading = false;
+  message = '';
+  messageType: 'success' | 'error' | '' = '';
+
   projects: Project[] = [];
   selectedProjectId = '';
 
@@ -35,9 +39,6 @@ export class ProjectUpdateComponent implements OnInit {
     description: '',
     startDate: '',
   };
-
-  message = '';
-  messageType: MessageType = '';
 
   constructor(
     private projectService: ProjectService,
@@ -112,32 +113,28 @@ export class ProjectUpdateComponent implements OnInit {
   }
 
   updateProject(): void {
-    this.clearMessage();
+    const id = this.selectedProjectId;
 
-    if (!this.selectedProjectId) {
+    if (!id) {
       this.message = 'Please select a project.';
       this.messageType = 'error';
-      this.cdr.detectChanges();
       return;
     }
 
-    this.submitting = true;
-    this.cdr.detectChanges();
+    this.loading = true;
+    this.message = '';
+    this.messageType = '';
 
-    this.projectService.updateProject(this.selectedProjectId, this.project).subscribe({
+    this.projectService.updateProject(id, this.project).subscribe({
       next: () => {
+        this.loading = false;
         this.message = 'Project updated successfully.';
         this.messageType = 'success';
-        this.submitting = false;
-        this.loadProjects();
-        this.cdr.detectChanges();
       },
-      error: (err: HttpErrorResponse) => {
-        console.error('Failed to update project:', err);
+      error: (err: any) => {
+        this.loading = false;
         this.message = err?.error?.message || 'Failed to update project.';
         this.messageType = 'error';
-        this.submitting = false;
-        this.cdr.detectChanges();
       },
     });
   }

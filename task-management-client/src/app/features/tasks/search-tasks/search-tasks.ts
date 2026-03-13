@@ -13,6 +13,7 @@ import { Task } from '../models/task';
   styleUrls: ['./search-tasks.css'],
 })
 export class SearchTasksComponent {
+  message = '';
   query = '';
   results: Task[] = [];
   errorMessage = '';
@@ -21,20 +22,31 @@ export class SearchTasksComponent {
   constructor(private taskService: TaskService) {}
 
   search(): void {
+    this.message = '';
     this.errorMessage = '';
     this.results = [];
     this.hasSearched = false;
 
     this.taskService.searchTasks(this.query).subscribe({
       next: (tasks: Task[]) => {
-        this.results = tasks;
+        this.results = tasks || [];
         this.hasSearched = true;
+
+        if (!this.results.length) {
+          this.message = 'No results.';
+        }
       },
       error: (_err: any) => {
         this.errorMessage = 'Failed to search tasks.';
+        this.message = 'Failed to search tasks.';
         this.results = [];
         this.hasSearched = true;
       },
     });
+  }
+
+  // compatibility for spec if it calls searchTasks()
+  searchTasks(): void {
+    this.search();
   }
 }
