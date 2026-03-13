@@ -63,6 +63,25 @@ const getAllProjects = async (req, res) => {
   }
 };
 
+const searchProjects = async (req, res) => {
+  try {
+    const q = (req.query.q || "").trim();
+    if (!q) return res.status(200).json([]);
+
+    const regex = new RegExp(q, "i");
+    const projects = await Project.find({
+      $or: [{ name: regex }, { description: regex }],
+    });
+
+    return res.status(200).json(projects);
+  } catch (error) {
+    return res.status(500).json({
+      message: "Server error while searching projects.",
+      error: error.message,
+    });
+  }
+};
+
 const updateProject = async (req, res) => {
   try {
     const { id } = req.params;
@@ -124,6 +143,7 @@ module.exports = {
   createProject,
   getProjectById,
   getAllProjects,
+  searchProjects,
   updateProject,
   deleteProject,
 };

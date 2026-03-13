@@ -24,6 +24,11 @@ export class ProjectService {
     return this.getProjects();
   }
 
+  searchProjects(q: string): Observable<Project[]> {
+    const term = (q || '').trim();
+    return this.http.get<Project[]>(`${this.apiUrl}/search?q=${encodeURIComponent(term)}`);
+  }
+
   getProjectById(id: string): Observable<Project> {
     return this.http.get<Project>(`${this.apiUrl}/${id}`);
   }

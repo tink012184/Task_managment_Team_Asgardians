@@ -71,4 +71,11 @@ export const routes: Routes = [
         (m) => m.ProjectDeleteComponent,
       ),
   },
+  {
+  path: 'projects/search',
+  loadComponent: () =>
+    import('./features/tasks/projects/project-search/project-search.component').then(
+      (m) => m.ProjectSearchComponent,
+    ),
+},
 ];
