@@ -109,6 +109,13 @@ export class DashboardComponent {
           status: 'ready',
           owner: 'Student B',
         },
+        {
+          title: 'Search Projects',
+          description: 'Search projects by name/description.',
+          route: '/projects/search',
+          status: 'ready',
+          owner: 'Student C',
+        },
       ],
     },
     {

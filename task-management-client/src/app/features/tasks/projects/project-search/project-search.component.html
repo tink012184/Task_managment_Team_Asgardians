@@ -1,0 +1,16 @@
+<h2>Search Projects</h2>
+
+<input [(ngModel)]="query" placeholder="Search..." />
+<button (click)="search()">Search</button>
+
+<p *ngIf="errorMessage">{{ errorMessage }}</p>
+
+<ng-container *ngIf="!errorMessage">
+  <ng-container *ngIf="results$ | async as results">
+    <p *ngIf="results.length === 0">No results.</p>
+
+    <ul *ngIf="results.length > 0">
+      <li *ngFor="let p of results">{{ p.name }}</li>
+    </ul>
+  </ng-container>
+</ng-container>

@@ -5,6 +5,7 @@ const {
   createProject,
   getProjectById,
   getAllProjects,
+  searchProjects,
   updateProject,
   deleteProject,
 } = require("../controllers/projectController");
@@ -14,6 +15,9 @@ router.get("/", getAllProjects);
 
 // Create project (Student A)
 router.post("/", createProject);
+
+// Search projects
+router.get("/search", searchProjects);
 
 // Read project by ID (Student B)
 router.get("/:id", getProjectById);
