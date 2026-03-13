@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Observable, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
 
 import { ProjectService } from '../project.service';
 import { Project } from '../projects.model';
@@ -17,24 +15,36 @@ import { Project } from '../projects.model';
 export class ProjectSearchComponent {
   query = '';
   errorMessage = '';
-  results$: Observable<Project[]> = of([]);
+  message = '';
+  results: Project[] = [];
 
   constructor(private projectService: ProjectService) {}
 
   search(): void {
     this.errorMessage = '';
+    this.message = '';
+    this.results = [];
 
     const term = (this.query || '').trim();
+
     if (!term) {
-      this.results$ = of([]);
+      this.message = 'No results.';
       return;
     }
 
-    this.results$ = this.projectService.searchProjects(term).pipe(
-      catchError(() => {
+    this.projectService.searchProjects(term).subscribe({
+      next: (projects: Project[]) => {
+        this.results = projects || [];
+
+        if (this.results.length === 0) {
+          this.message = 'No results.';
+        }
+      },
+      error: () => {
         this.errorMessage = 'Failed to search projects.';
-        return of([]);
-      }),
-    );
+        this.message = 'Failed to search projects.';
+        this.results = [];
+      },
+    });
   }
 }

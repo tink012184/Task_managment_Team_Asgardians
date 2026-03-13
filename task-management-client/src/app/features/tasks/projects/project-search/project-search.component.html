@@ -1,16 +1,23 @@
-<h2>Search Projects</h2>
+<div class="project-search-container">
+  <h2>Search Projects</h2>
 
-<input [(ngModel)]="query" placeholder="Search..." />
-<button (click)="search()">Search</button>
+  <div class="search-bar">
+    <input type="text" [(ngModel)]="query" placeholder="Search projects..." class="search-input" />
 
-<p *ngIf="errorMessage">{{ errorMessage }}</p>
+    <button type="button" (click)="search()" class="search-button">Search</button>
+  </div>
 
-<ng-container *ngIf="!errorMessage">
-  <ng-container *ngIf="results$ | async as results">
-    <p *ngIf="results.length === 0">No results.</p>
+  <p *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </p>
 
-    <ul *ngIf="results.length > 0">
-      <li *ngFor="let p of results">{{ p.name }}</li>
-    </ul>
-  </ng-container>
-</ng-container>
+  <p *ngIf="message && !errorMessage" class="info-message">
+    {{ message }}
+  </p>
+
+  <ul *ngIf="results.length > 0" class="results-list">
+    <li *ngFor="let project of results">
+      <strong>{{ project.name }}</strong>
+    </li>
+  </ul>
+</div>
